@@ -33,7 +33,7 @@ Phishing attacks targeting crypto users cost billions annually. Attackers regist
 | Feature | Description |
 |---------|-------------|
 | 🔗 **Link Scanning** | Every hyperlink on every page is scanned in real-time |
-| 🖼️ **Image & Ad Scanning** | Images and videos wrapped in links are scanned too |
+| 🖼️ **Image & Ad Scanning** | Images and videos wrapped in links are scanned too (Media Verification) |
 | 📢 **iframe/Ad Detection** | Runs inside iframes — catches banner ads and embedded content |
 | 🖱️ **Hover Badges** | Security status badge appears on hover — Green/Blue/Amber/Red |
 | 🚨 **Right-Click Verify** | Right-click any link, image, or video to manually trigger verification |
@@ -45,39 +45,50 @@ Phishing attacks targeting crypto users cost billions annually. Attackers regist
 
 ## 🧠 Architecture
 
-```
-┌─────────────────────── Chrome Extension (MV3) ──────────────────────────┐
-│                                                                          │
-│  content.js          popup.html / popup.js       background.js          │
-│  ─────────────────   ─────────────────────────   ─────────────────────  │
-│  • IntersectionObserver  • Shows current URL     • Context menu handler  │
-│    lazy link/img/video   • Report current site   • Right-click verify   │
-│    scanning              • Backend status        • Shows result on page  │
-│  • Hover badge display                                                   │
-│                                                                          │
-└────────────────────────┬─────────────────────────────────────────────────┘
-                         │ POST /verify (JSON)
-                         ▼
-┌──────────────────── FastAPI Backend ─────────────────────────────────────┐
-│                                                                          │
-│  Layer 1 → Coinbase Allowlist (instant, zero false negatives)           │
-│  Layer 2 → Known Phishing Blocklist (instant)                           │
-│  Layer 3 → Tranco Top 1M Trusted Domains (loads async at startup)       │
-│  Layer 4 → ML Model: TF-IDF + RandomForest (trains async at startup)    │
-│           └─ Trained on 235,000+ real URLs from PhiUSIIL dataset        │
-│                                                                          │
-└──────────────────────────────────────────────────────────────────────────┘
+Phish-Guard uses a **Hybrid Async Architecture** to ensure zero latency for the user while handling heavy ML tasks in the background.
+
+```mermaid
+graph TD
+    subgraph "Chrome Extension (MV3)"
+        C[content.js<br>Media & Link Scanner]
+        B[background.js<br>Context Menu Handler]
+        P[popup.js<br>UI & Reporting]
+    end
+
+    subgraph "FastAPI Backend"
+        API[API Gateway<br>FastAPI / Uvicorn]
+        
+        subgraph "Real-Time Detection Engine"
+            Cache[LRU Cache<br>50k Entries]
+            L1[Layer 1: Allowlist]
+            L2[Layer 2: Blocklist]
+            L3[Layer 3: Tranco 1M]
+            L4[Layer 4: ML Model]
+        end
+        
+        subgraph "Async Background Workers"
+            T_Loader[Tranco Loader<br>Background Thread]
+            ML_Trainer[ML Trainer<br>Background Thread]
+        end
+    end
+
+    C -->|POST /verify| API
+    B -->|POST /verify| API
+    P -->|POST /report| API
+    
+    API --> Cache
+    Cache --> L1
+    L1 --> L2
+    L2 --> L3
+    L3 --> L4
+    
+    T_Loader -.->|Async Update| L3
+    ML_Trainer -.->|Async Update| L4
 ```
 
-### Badge Status Guide
-
-| Badge | Status | Meaning |
-|-------|--------|---------|
-| ✅ Blue | `safe` | Official Coinbase domain (coinbase.com, base.org, etc.) |
-| 🛡️ Green | `trusted` | Tranco Top 1M verified popular site |
-| ⚠️ Amber | `warning` | ML model flagged as likely phishing |
-| 🚨 Red | `phish` | Known phishing domain — blocked |
-| ⚪ Gray | `neutral` | Unverified — use caution |
+### Key Engineering Decisions
+- **Async ML Training**: The RandomForest model trains on 235K URLs in a background daemon thread. The server starts instantly, and the ML layer activates seamlessly once training completes.
+- **Lazy Scanning**: `IntersectionObserver` is used to only scan links and media elements when they enter the viewport, ensuring zero performance impact on heavy web pages.
 
 ---
 
@@ -116,7 +127,7 @@ This script will:
 
 ### 4. Browse & Stay Safe
 
-Hover over any link on any website. The Phish-Guard badge will appear showing the security status.
+Hover over any link, image, or video on any website. The Phish-Guard badge will appear showing the security status.
 
 ---
 
@@ -124,49 +135,39 @@ Hover over any link on any website. The Phish-Guard badge will appear showing th
 
 ### The 4-Layer Detection Engine
 
-```
-URL Input
-    │
-    ▼
-┌─────────────────────────────────────────────────────┐
-│  Layer 1: Coinbase Allowlist                        │
-│  • coinbase.com, base.org, prime.coinbase.com, etc.│
-│  • Instant ✅ if matched                            │
-└──────────────────────────┬──────────────────────────┘
-                           │ no match
-                           ▼
-┌─────────────────────────────────────────────────────┐
-│  Layer 2: Known Phishing Blocklist                  │
-│  • coinbase-support.xyz, wallet-connect-base.org   │
-│  • Instant 🚨 if matched                            │
-└──────────────────────────┬──────────────────────────┘
-                           │ no match
-                           ▼
-┌─────────────────────────────────────────────────────┐
-│  Layer 3: Tranco Top 1M Trusted Domains             │
-│  • 1,000,000+ globally popular domains             │
-│  • Instant 🛡️ if matched                           │
-└──────────────────────────┬──────────────────────────┘
-                           │ no match
-                           ▼
-┌─────────────────────────────────────────────────────┐
-│  Layer 4: ML Model (TF-IDF + RandomForest)          │
-│  • Trained on 235K+ URLs (PhiUSIIL dataset)        │
-│  • Character-level n-gram analysis (3-5 grams)     │
-│  • Returns phishing probability 0.0–1.0            │
-│  • > 65% → ⚠️  Warning                             │
-│  • > 40% → ⚪ Neutral                              │
-│  • ≤ 40% → 🛡️  Safe (unverified)                  │
-└─────────────────────────────────────────────────────┘
+Every URL passes through a high-performance filtering pipeline:
+
+```mermaid
+flowchart TD
+    Start([URL Input]) --> L1{Layer 1<br>Coinbase Allowlist}
+    L1 -->|Match| Safe[✅ Safe<br>Official Domain]
+    L1 -->|No Match| L2{Layer 2<br>Blocklist}
+    
+    L2 -->|Match| Phish[🚨 Phish<br>Known Threat]
+    L2 -->|No Match| L3{Layer 3<br>Tranco 1M}
+    
+    L3 -->|Match| Trusted[🛡️ Trusted<br>Popular Site]
+    L3 -->|No Match| L4{Layer 4<br>ML Model}
+    
+    L4 -->|Prob > 65%| Warning[⚠️ Warning<br>Suspected Phishing]
+    L4 -->|Prob > 40%| Neutral[⚪ Neutral<br>Unverified]
+    L4 -->|Prob <= 40%| SafeML[🛡️ Safe<br>Low Risk]
+    
+    style Safe fill:#d1fae5,stroke:#059669
+    style Phish fill:#fee2e2,stroke:#dc2626
+    style Trusted fill:#dbeafe,stroke:#2563eb
+    style Warning fill:#fef3c7,stroke:#d97706
 ```
 
-### Performance Optimizations
+### Badge Status Guide
 
-- **Async Startup**: ML model trains in a background thread. Server responds in `<100ms` from launch.
-- **Async Tranco Loading**: 1M domain list loads in background — initial trusted set of 40+ domains is available instantly.
-- **LRU Cache**: 50,000-entry cache with O(1) lookup — repeated URLs returned in microseconds.
-- **IntersectionObserver**: Only scans links entering the viewport — zero overhead for off-screen content.
-- **Thread-Safe Design**: All shared data (cache, trusted domains) protected with `threading.Lock`.
+| Badge | Status | Meaning |
+|-------|--------|---------|
+| ✅ Blue | `safe` | Official Coinbase domain (coinbase.com, base.org, etc.) |
+| 🛡️ Green | `trusted` | Tranco Top 1M verified popular site (google.com, github.com) |
+| ⚠️ Amber | `warning` | ML model flagged as likely phishing |
+| 🚨 Red | `phish` | Known phishing domain — blocked |
+| ⚪ Gray | `neutral` | Unverified — use caution |
 
 ---
 
@@ -228,32 +229,24 @@ Interactive Swagger API documentation (auto-generated by FastAPI).
 ```
 phish-guard/
 ├── backend/
-│   ├── main.py                    # FastAPI app, routes, static serving
-│   ├── phishing_detector.py       # 4-layer detection engine (async)
-│   ├── ml_model.py                # TF-IDF + RandomForest model (async training)
+│   ├── main.py                    # FastAPI app, async entry point
+│   ├── phishing_detector.py       # 4-layer engine logic
+│   ├── ml_model.py                # Async ML training logic
 │   ├── requirements.txt           # Python dependencies
-│   └── static/
-│       ├── index.html             # Landing page
-│       ├── style.css              # Landing page styles
-│       └── script.js              # Live stats fetching
+│   └── static/                    # Landing page assets
 │   └── datasets/
-│       ├── PhiUSIIL_Phishing_URL_Dataset.csv   # 235K URLs for ML training
-│       └── top-1m.csv             # Tranco Top 1M domain list
+│       ├── PhiUSIIL_Phishing_URL_Dataset.csv   # 235K URLs
+│       └── top-1m.csv             # Tranco Top 1M list
 │
 ├── extension/
 │   ├── manifest.json              # Chrome MV3 manifest (v1.1)
-│   ├── content.js                 # Link/image/video scanner (IntersectionObserver)
-│   ├── background.js              # Service worker, right-click menu
-│   ├── popup.html                 # Extension popup UI
-│   ├── popup.js                   # Popup logic (report, URL display)
-│   ├── styles.css                 # Extension styles
-│   └── icons/
-│       ├── icon16.png
-│       ├── icon48.png
-│       └── icon128.png
+│   ├── content.js                 # Media/Link scanner (IntersectionObserver)
+│   ├── background.js              # Service worker
+│   ├── popup.html                 # UI
+│   └── icons/                     # Generated logos
 │
-├── test_links.html                # Test suite for all badge types
-├── start_backend.sh               # One-command backend starter
+├── docs/                          # GitHub Pages static site
+├── start_backend.sh               # Robust startup script
 └── README.md
 ```
 

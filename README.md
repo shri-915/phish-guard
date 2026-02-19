@@ -90,7 +90,7 @@ Phishing attacks targeting crypto users cost billions annually. Attackers regist
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/phish-guard.git
+git clone https://github.com/shri-915/phish-guard.git
 cd phish-guard
 ```
 

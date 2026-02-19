@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phish-Guard Test Links</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0b0d; color: #fff; padding: 40px; max-width: 900px; margin: 0 auto; }
+        h1 { color: #0052FF; margin-bottom: 4px; }
+        .subtitle { color: #6b7280; margin-bottom: 40px; font-size: 14px; }
+        h2 { color: #9ca3af; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; margin: 32px 0 12px; border-bottom: 1px solid #1f2937; padding-bottom: 8px; }
+        .link-list { display: flex; flex-direction: column; gap: 10px; }
+        .link-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: #111827; border-radius: 8px; border-left: 4px solid #374151; text-decoration: none; color: #e5e7eb; font-size: 14px; transition: background 0.2s; }
+        .link-item:hover { background: #1f2937; }
+        .link-item.safe { border-left-color: #0052FF; }
+        .link-item.trusted { border-left-color: #059669; }
+        .link-item.phish { border-left-color: #CF202F; }
+        .link-item.warning { border-left-color: #D97706; }
+        .link-item.neutral { border-left-color: #6B7280; }
+        .badge { font-size: 18px; flex-shrink: 0; }
+        .label { font-weight: 600; font-size: 12px; color: #9ca3af; min-width: 80px; }
+        .url { font-family: monospace; font-size: 13px; color: #60a5fa; }
+        .media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 12px; }
+        .media-card { background: #111827; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937; }
+        .media-card a { display: block; text-decoration: none; }
+        .media-card img, .media-card video { width: 100%; height: 140px; object-fit: cover; display: block; background: #1f2937; }
+        .media-card .caption { padding: 10px 12px; font-size: 12px; color: #9ca3af; }
+        .media-card .caption strong { display: block; color: #e5e7eb; margin-bottom: 2px; }
+        .instructions { background: #0052FF15; border: 1px solid #0052FF40; border-radius: 8px; padding: 16px 20px; margin-bottom: 32px; font-size: 13px; color: #93c5fd; line-height: 1.6; }
+        .instructions strong { color: #fff; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ Phish-Guard Test Suite</h1>
+    <p class="subtitle">Hover over any link, image, or video to see the Phish-Guard badge.</p>
+
+    <div class="instructions">
+        <strong>How to use:</strong><br>
+        1. Make sure the backend is running: <code>./start_backend.sh</code><br>
+        2. Load the extension from <code>chrome://extensions</code> → Load Unpacked → select <code>extension/</code><br>
+        3. Hover over any element below to see the security badge appear.
+    </div>
+
+    <!-- Official Coinbase -->
+    <h2>✅ Official Coinbase Domains (Expect: Green Shield)</h2>
+    <div class="link-list">
+        <a class="link-item safe" href="https://www.coinbase.com"><span class="badge">✅</span><span class="label">SAFE</span><span class="url">https://www.coinbase.com</span></a>
+        <a class="link-item safe" href="https://help.coinbase.com"><span class="badge">✅</span><span class="label">SAFE</span><span class="url">https://help.coinbase.com</span></a>
+        <a class="link-item safe" href="https://prime.coinbase.com"><span class="badge">✅</span><span class="label">SAFE</span><span class="url">https://prime.coinbase.com</span></a>
+        <a class="link-item safe" href="https://base.org"><span class="badge">✅</span><span class="label">SAFE</span><span class="url">https://base.org</span></a>
+    </div>
+
+    <!-- Trusted Sites -->
+    <h2>🛡️ Trusted Popular Sites (Expect: Green Trusted Badge)</h2>
+    <div class="link-list">
+        <a class="link-item trusted" href="https://www.google.com"><span class="badge">🛡️</span><span class="label">TRUSTED</span><span class="url">https://www.google.com</span></a>
+        <a class="link-item trusted" href="https://www.github.com"><span class="badge">🛡️</span><span class="label">TRUSTED</span><span class="url">https://www.github.com</span></a>
+        <a class="link-item trusted" href="https://www.reddit.com"><span class="badge">🛡️</span><span class="label">TRUSTED</span><span class="url">https://www.reddit.com</span></a>
+        <a class="link-item trusted" href="https://www.netflix.com"><span class="badge">🛡️</span><span class="label">TRUSTED</span><span class="url">https://www.netflix.com</span></a>
+    </div>
+
+    <!-- Known Phishing -->
+    <h2>🚨 Known Phishing Domains (Expect: Red Alert)</h2>
+    <div class="link-list">
+        <a class="link-item phish" href="http://coinbase-support.xyz"><span class="badge">🚨</span><span class="label">PHISH</span><span class="url">http://coinbase-support.xyz</span></a>
+        <a class="link-item phish" href="http://wallet-connect-base.org"><span class="badge">🚨</span><span class="label">PHISH</span><span class="url">http://wallet-connect-base.org</span></a>
+        <a class="link-item phish" href="http://secure-login-cb.net"><span class="badge">🚨</span><span class="label">PHISH</span><span class="url">http://secure-login-cb.net</span></a>
+    </div>
+
+    <!-- ML Suspicious -->
+    <h2>⚠️ ML-Flagged Suspicious (Expect: Amber Warning)</h2>
+    <div class="link-list">
+        <a class="link-item warning" href="http://coinbase-login-secure-update.com"><span class="badge">⚠️</span><span class="label">WARNING</span><span class="url">http://coinbase-login-secure-update.com</span></a>
+        <a class="link-item warning" href="http://verify-coinbase-kyc-now.net"><span class="badge">⚠️</span><span class="label">WARNING</span><span class="url">http://verify-coinbase-kyc-now.net</span></a>
+        <a class="link-item warning" href="http://coinbase-airdrop-claim-free.xyz"><span class="badge">⚠️</span><span class="label">WARNING</span><span class="url">http://coinbase-airdrop-claim-free.xyz</span></a>
+    </div>
+
+    <!-- Neutral -->
+    <h2>⚪ Unverified Sites (Expect: Gray Neutral)</h2>
+    <div class="link-list">
+        <a class="link-item neutral" href="http://some-random-blog.net"><span class="badge">⚪</span><span class="label">NEUTRAL</span><span class="url">http://some-random-blog.net</span></a>
+        <a class="link-item neutral" href="http://my-portfolio-site.io"><span class="badge">⚪</span><span class="label">NEUTRAL</span><span class="url">http://my-portfolio-site.io</span></a>
+    </div>
+
+    <!-- Phase 3: Media Tests -->
+    <h2>🖼️ Media Link Tests — Images & Videos (Phase 3)</h2>
+    <p style="font-size:13px;color:#6b7280;margin-bottom:16px">Hover over the images and videos below. The badge should appear based on the link they point to.</p>
+    <div class="media-grid">
+
+        <!-- Safe image link -->
+        <div class="media-card">
+            <a href="https://www.coinbase.com" title="Official Coinbase">
+                <img src="https://via.placeholder.com/300x140/0052FF/ffffff?text=Coinbase+Official" alt="Coinbase">
+                <div class="caption"><strong>✅ Safe Image Link</strong>Points to coinbase.com</div>
+            </a>
+        </div>
+
+        <!-- Phishing image link -->
+        <div class="media-card">
+            <a href="http://coinbase-support.xyz" title="Phishing Site">
+                <img src="https://via.placeholder.com/300x140/CF202F/ffffff?text=Fake+Coinbase+Support" alt="Fake Support">
+                <div class="caption"><strong>🚨 Phishing Image Link</strong>Points to coinbase-support.xyz</div>
+            </a>
+        </div>
+
+        <!-- Trusted image link -->
+        <div class="media-card">
+            <a href="https://www.google.com" title="Google">
+                <img src="https://via.placeholder.com/300x140/059669/ffffff?text=Google+Search" alt="Google">
+                <div class="caption"><strong>🛡️ Trusted Image Link</strong>Points to google.com</div>
+            </a>
+        </div>
+
+        <!-- Warning image link -->
+        <div class="media-card">
+            <a href="http://coinbase-login-secure-update.com" title="Suspicious">
+                <img src="https://via.placeholder.com/300x140/D97706/ffffff?text=Suspicious+Ad" alt="Suspicious Ad">
+                <div class="caption"><strong>⚠️ Suspicious Image Link</strong>ML-flagged domain</div>
+            </a>
+        </div>
+
+        <!-- Video link test -->
+        <div class="media-card">
+            <a href="https://www.coinbase.com" title="Coinbase Video">
+                <video muted loop autoplay playsinline style="height:140px;width:100%;object-fit:cover;background:#0052FF20">
+                    <source src="" type="video/mp4">
+                </video>
+                <div class="caption"><strong>✅ Safe Video Link</strong>Points to coinbase.com</div>
+            </a>
+        </div>
+
+        <!-- Standalone image (no link) -->
+        <div class="media-card">
+            <img src="https://via.placeholder.com/300x140/374151/9ca3af?text=Standalone+Image+(No+Link)" alt="No link" style="height:140px">
+            <div class="caption"><strong>⚪ Standalone Image</strong>No destination link — neutral</div>
+        </div>
+
+    </div>
+
+</body>
+</html>

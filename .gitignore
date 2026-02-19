@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# MacOS
+.DS_Store
+
+# Logs
+*.log
+
+# Large Datasets (tracked by LFS, but good to ignore if LFS not used)
+# backend/datasets/*.csv  <-- We will use LFS for these, so don't ignore them here, just ensure LFS tracks them.
+
+# IDEs
+.vscode/
+.idea/
+
+# Backend specific
+backend/model.pkl
+backend/training_data/

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phish-Guard — Protect Your Crypto</title>
+    <meta name="description"
+        content="Phish-Guard is a real-time phishing detection browser extension built to protect Coinbase users from scam domains.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src="script.js"></script>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-logo">
+                <span class="logo-icon">🛡️</span>
+                <span class="logo-text">Phish-Guard</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#stats">Live Stats</a>
+                <a href="#download" class="nav-cta">Get Extension</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Built for Coinbase Security
+            </div>
+            <h1 class="hero-title">
+                Stop Phishing.<br>
+                <span class="gradient-text">Protect Your Crypto.</span>
+            </h1>
+            <p class="hero-subtitle">
+                A real-time browser extension that verifies official Coinbase domains and detects
+                lookalike phishing URLs using machine learning — before you click.
+            </p>
+            <div class="hero-actions">
+                <a href="#download" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    Download Extension
+                </a>
+                <a href="#how-it-works" class="btn btn-secondary">
+                    Learn More →
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-number" id="trustedCount">—</span>
+                    <span class="stat-label">Trusted Domains</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number">235K+</span>
+                    <span class="stat-label">URLs Trained</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Detection Layers</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Demo Card -->
+        <div class="demo-card">
+            <div class="demo-header">
+                <div class="demo-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="demo-url">coinbase-support.xyz</span>
+            </div>
+            <div class="demo-body">
+                <div class="demo-result phishing">
+                    <span class="demo-icon">🚨</span>
+                    <div>
+                        <div class="demo-status">PHISHING ALERT</div>
+                        <div class="demo-message">Known Phishing Domain</div>
+                    </div>
+                </div>
+                <div class="demo-result safe">
+                    <span class="demo-icon">✅</span>
+                    <div>
+                        <div class="demo-status">OFFICIAL COINBASE</div>
+                        <div class="demo-message">coinbase.com — Verified</div>
+                    </div>
+                </div>
+                <div class="demo-result trusted">
+                    <span class="demo-icon">🛡️</span>
+                    <div>
+                        <div class="demo-status">TRUSTED SITE</div>
+                        <div class="demo-message">google.com — Verified Popular</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-content">
+            <div class="section-badge">FEATURES</div>
+            <h2 class="section-title">Four Layers of Protection</h2>
+            <p class="section-subtitle">Every link you hover over passes through our multi-layer security engine in
+                milliseconds.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon green">✅</div>
+                    <h3>Coinbase Allowlist</h3>
+                    <p>Instant verification of official Coinbase, Base, and Prime domains. Zero false negatives — if
+                        it's Coinbase, you'll know.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon blue">🛡️</div>
+                    <h3>Top 1M Whitelist</h3>
+                    <p>Backed by the Tranco research list. Google, GitHub, Reddit, and 1 million+ popular sites are
+                        auto-verified as trusted.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon red">🚨</div>
+                    <h3>Known Threat Blocklist</h3>
+                    <p>Real-time blocklist of confirmed phishing domains. Instantly flags known scam sites with a Red
+                        Alert.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon amber">🤖</div>
+                    <h3>ML Detection Engine</h3>
+                    <p>Trained on 235K+ real-world URLs. Catches new, never-seen-before phishing variants using
+                        character-level pattern analysis.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="section-content">
+            <div class="section-badge">HOW IT WORKS</div>
+            <h2 class="section-title">Simple. Invisible. Powerful.</h2>
+
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Install the Extension</h3>
+                        <p>Load Phish-Guard into Chrome or Brave in under 30 seconds. No signup. No data collection.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Browse Normally</h3>
+                        <p>Phish-Guard silently pre-scans every link on every page you visit. Results are cached for
+                            instant retrieval.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Hover to Verify</h3>
+                        <p>Hover over any link to instantly see its security status — Green Shield, Gray Shield, or Red
+                            Alert.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <div class="step-content">
+                        <h3>Report Threats</h3>
+                        <p>Found a suspicious site? One-click report sends it to the Coinbase Security queue for review.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Stats Section -->
+    <section class="stats-section" id="stats">
+        <div class="section-content">
+            <div class="section-badge">LIVE ENGINE</div>
+            <h2 class="section-title">Real-Time Intelligence</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTrusted">—</div>
+                    <div class="stat-name">Trusted Domains</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill green" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statCached">—</div>
+                    <div class="stat-name">Cached Predictions</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill blue" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statBlocklist">—</div>
+                    <div class="stat-name">Blocked Domains</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill red" style="width: 30%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statModel">—</div>
+                    <div class="stat-name">ML Model Status</div>
+                    <div class="stat-bar">
+                        <div class="stat-bar-fill amber" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download / CTA Section -->
+    <section class="download-section" id="download">
+        <div class="section-content">
+            <div class="download-card">
+                <h2>Ready to Protect Your Crypto?</h2>
+                <p>Download Phish-Guard and browse with confidence. Free, open-source, and privacy-first.</p>
+                <div class="download-steps">
+                    <div class="dl-step">
+                        <span class="dl-num">1</span>
+                        <span>Clone or download the repository</span>
+                    </div>
+                    <div class="dl-step">
+                        <span class="dl-num">2</span>
+                        <span>Open <code>chrome://extensions</code></span>
+                    </div>
+                    <div class="dl-step">
+                        <span class="dl-num">3</span>
+                        <span>Enable Developer Mode → Load Unpacked</span>
+                    </div>
+                    <div class="dl-step">
+                        <span class="dl-num">4</span>
+                        <span>Select the <code>extension/</code> folder</span>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <a href="https://github.com" target="_blank" class="btn btn-primary btn-lg">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+                        </svg>
+                        View on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <span>🛡️</span> Phish-Guard
+            </div>
+            <div class="footer-text">
+                Built as a security tool showcase for Coinbase Trust & Safety.
+                <br>Not affiliated with Coinbase Inc.
+            </div>
+            <div class="footer-tech">
+                FastAPI · Scikit-Learn · Chrome Manifest V3 · PhiUSIIL Dataset · Tranco Top 1M
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
